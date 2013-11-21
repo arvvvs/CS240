@@ -4,9 +4,14 @@
 
 #include <iostream>
 #include <fstream>
+#include <string>
+#include <sstream>
+#include <algorithm>
+#include "DigitStat.h"
 
-#define ERROR_INVALID_ARGS 1
-#define ERROR_INVALID_FILE 2
+#define ERROR_INVALID_ARGS	1
+#define ERROR_INVALID_FILE	2
+#define ERROR_BAD_FORMAT	3
 
 using namespace std;
 
@@ -14,6 +19,7 @@ int main(int argc, char* argv[]) {
 	// Variables...
 	ofstream outFile;
 	ifstream inFile;
+	LinkedNode *head;
 	
 	if (argc != 3) { // Check argument count...
 		cout << "Format: " << argv[0] << " infile outfile" << endl;
@@ -28,4 +34,59 @@ int main(int argc, char* argv[]) {
 			return ERROR_INVALID_FILE;
 		}
 	}
+
+	// So now our input and output files are initialized, we need to read the numbers in one by one and insert them into a doubly linked list.
+	for (string line; getline(inFile, line); ) {
+		// Convert the string into a stringstream
+		istringstream ss(line);
+		// And read it into a double. Exit with a bad format if we can't read a double.
+		double val;
+		if (!(ss >> val))
+			return ERROR_BAD_FORMAT;
+
+		// Now we create a new LinkedNode to store our value...
+		LinkedNode *temp = new LinkedNode;
+		temp->value = &line;
+		temp->actualValue = val;
+
+		// And we set up the DigitCounts struct.
+		// Note: b + 30 is converting byte b into a char with a value of '0', '1', etc
+		// "count" is from the algorithms import, and operates on templated collections.
+		// Since string is a templated collection of chars, this works.
+		for (byte b = 0; b < 10; b++) { // Iterate 0-9
+			temp->digitCounts[b] = count(line.begin(), line.end(), (b + 30));
+		}
+
+		// Now we need to insert this in the current array. In a sorted fashion, mind you.
+		if (head == nullptr) // CASE: list is empty.
+			head = temp;
+		else { // CASE: List is not empty.
+
+			// Determine the node we need to insert before.
+			LinkedNode *before = head;
+			while (*before->actualValue < val && before->next != nullptr)
+				before = before->next;
+
+			if (before->actualValue < val && before->next == nullptr) { // CASE: insert on tail
+				before->next = temp;
+				temp->prev = before;
+			}
+			else { // CASE: insert in the middle or at the head.
+				temp->next = before;
+				temp->prev = before->prev;
+
+				if (before == head)
+					head = temp;
+
+				if (before->prev != nullptr)
+					before->prev->next = temp;
+				before->prev = temp;
+			}
+		}
+	}
+
+	/******   TODO:   ******/
+	// Output what we have so far to the file.
+	// Prompt console for input
+	// We're almost done!
 }
