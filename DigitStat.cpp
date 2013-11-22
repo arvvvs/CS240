@@ -20,6 +20,8 @@ int main(int argc, char* argv[]) {
 	ofstream outFile;
 	ifstream inFile;
 	LinkedNode *head;
+	int integers = 0, fractions = 0;
+	int firstDigCount[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 	
 	if (argc != 3) { // Check argument count...
 		cout << "Format: " << argv[0] << " infile outfile" << endl;
@@ -48,6 +50,15 @@ int main(int argc, char* argv[]) {
 		LinkedNode *temp = new LinkedNode;
 		temp->value = &line;
 		temp->actualValue = val;
+
+		//Counting first digit occurrences.
+		firstDigCount[(int)line.at(0)]++;
+
+		//Checking whether or not the value is a fraction or an integer
+		if(val == (int)val)
+			integers++;
+		else 
+			fractions++;
 
 		// And we set up the DigitCounts struct.
 		// Note: b + 30 is converting byte b into a char with a value of '0', '1', etc
@@ -89,4 +100,41 @@ int main(int argc, char* argv[]) {
 	// Output what we have so far to the file.
 	// Prompt console for input
 	// We're almost done!
+
+
+	/* Start of file output */
+
+	//Printing ordered list to the outfile.
+	LinkedNode* holder = head;
+	while(holder != nullptr) {
+
+		outFile << holder->value << "\n";
+
+		//Need to specify C++11 for compiling
+		outFile << "[0-9]: ";
+		for(int &x : holder->digitCounts) 
+			outFile << *x << ", ";
+
+		outFile << "\n";
+
+		holder = holder->next;
+	}
+
+	//Printing integer value occurrence
+	outFile << "There were " << integers << " integer values in the data set.\n";
+
+	//Printing fraction occurrence
+	outFile << "There were " << fractions << " fractional values in the data set.\n";
+
+	//Printing first digit occurrence distrivbution.
+	outFile << "Distribution of first digit [0-9]: \n";
+	for(int &x : firstDigCount)
+		outFile << *x << ", ";
+
+	outFile << "\n";
+
+	outFile.close();
+
+	/*End of file output*/
+
 }

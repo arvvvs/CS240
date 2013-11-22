@@ -8,5 +8,5 @@ all: DigitStat.o
 DigitStat.o: DigitStat.cpp
 	$C $A -c DigitStat.cpp
 
-clean
+clean:
 	rm -rf *.o $O
