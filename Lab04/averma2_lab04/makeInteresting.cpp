@@ -82,7 +82,7 @@ void makeInteresting::replace(){
     found=myLine.find(original[i]);
     while(found!= -1){
       myLine.replace(found, original[i].length(), replacement[i]);
-   //   cout<<"1 found"<<original[i]<<" at "<<found<<"\n"; 
+    //   cout<<"1 found"<<original[i]<<" at "<<found<<"\n"; 
       totalFound++;
       found= myLine.find(original[i], found+replacement[i].size());
       
