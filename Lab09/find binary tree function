@@ -1,0 +1,42 @@
+BST::search(aData){
+	if(tree==NULL){
+		return false;
+	}
+	else if(tree->data==aData){
+		return true
+	}
+	else{
+		BinNode* check;
+		check=find(tree, aData);
+	}
+	if(check!=NULL){
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+BST::find(int data){
+	iFind(data, root);
+}
+BST::iFind(BinNode* tree, int aData){
+	if(tree==NULL){
+		return NULL;
+	}
+	else if(tree->data==aData){
+		return tree;
+	}
+	else{		
+	BinNode* left=search(tree->left, aData);
+	BinNode* right=search(tree->right, aData);
+	if(left!=NULL){
+		return left;
+	}	
+	else if(right!=NULL){
+		return right;
+	}
+	else{
+		return NULL;
+	}
+	}
+}
