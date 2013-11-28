@@ -36,7 +36,13 @@ int main(int argc, char* argv[]) {
 			return ERROR_INVALID_FILE;
 		}
 	}
-
+  //this is a good place as any to create the linked list struct
+    struct LinkedNode{
+      int next;
+      int prev;
+      int value;
+      double actualValue;
+      }
 	// So now our input and output files are initialized, we need to read the numbers in one by one and insert them into a doubly linked list.
 	for (string line; getline(inFile, line); ) {
 		// Convert the string into a stringstream
