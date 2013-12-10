@@ -4,7 +4,7 @@
 
 using namespace std;
 
-Graph::Grpah() {
+Graph::Graph() {
 
 }
 
@@ -47,6 +47,9 @@ bool Graph::empty() {
 void Graph::addEdge(string v1, string v2, int weight) {
 	//Basically need to resolve the string names to array positions,
 	//then check that spot and put this weight in it.
+	it=mymap.find(v1);
+	it2=mymap.find(v2);
+	matrix[it][it2]=weight;	
 }
 
 void Graph::addVertex(string name, float val) {
