@@ -1,5 +1,8 @@
 #include <string>
 #include <iostream>
+#include <vector>
+#include <set>
+#include <map>
 
 //This class will be used to create a graph library.
 
@@ -14,8 +17,23 @@ where V is the set of vertices, and E is the set of edges
 
 class Graph{
 	private:
-		//Put your private data members here
-		//Put your private methods here
+		std::vector<vector<int>> matrix;
+		std::set<Vertex> vertices;
+		std::set<Edge> edges;
+		std::map<int, Vertex> vMap;
+		std::map<string, int> nMap;
+		
+		class Vertex {
+			float value;
+			std::string name;
+		};
+		
+		class Edge {
+			Vertex one;
+			Vertex two;
+			int weight;
+		};
+		
 	public:
 		//Construct
 		Graph();
