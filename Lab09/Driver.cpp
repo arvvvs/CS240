@@ -5,7 +5,7 @@
 #include <string>
 using namespace std;
 int main(){
-BST BST1;
+/*BST BST1;
 cout<<"post order"<<endl;
 BST1.post_order();
 cout<<"insert 1"<<endl;
@@ -40,8 +40,9 @@ BST1.insert(7);
 cout<<"in order"<<endl;
 BST1.in_order();
 BST1.post_order();
+*/
 BST BST2;
-BST2.insert(1);
+/*BST2.insert(1);
 BST2.insert(2);
 BST2.insert(3);
 BST2.insert(4);
@@ -55,6 +56,13 @@ cout<<endl;
 BST2.remove(1);
 BST2.remove(4);
 BST2.remove(3);
+BST2.remove(3);
+cout<<endl;
+BST2.in_order();
+cout<<endl;
+*/
+BST2.write("BSTtry");
+BST2.pre_order();
 cout<<endl;
 BST2.in_order();
 }

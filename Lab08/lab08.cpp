@@ -42,8 +42,8 @@ void lab08::run(){
    if(isAlphaNumeric(temp)){
     //  cout<<temp<<endl;
 //      lineCount++;
-      string lowerString= makeLower(temp);
-      string noPunct=removePunctuation(lowerString);
+  //    string lowerString= makeLower(temp);
+      string noPunct=removePunctuation(temp);
       makeList(noPunct); 
     //  cout<<endl;
    } 

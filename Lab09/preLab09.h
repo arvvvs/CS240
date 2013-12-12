@@ -3,6 +3,7 @@
 #include <cctype>
 #include <fstream>
 #include <string>
+#include <deque> 
 using namespace std;
 
 class BinNode{
@@ -24,6 +25,7 @@ class BST{
   int height();
   int iHeight(BinNode* tree); 
   BinNode* root;
+  void reInsert(BinNode* tree);
   bool empty();
   bool is_BST();
   bool ris_BST(BinNode* tree);
@@ -43,6 +45,13 @@ class BST{
   void post_order();
   void write(string file_name);
   void read(string file_name);
-  
+  void vWrite(std::deque<int> values);
+  void lWrite(int value, BinNode* current);
+  void lrWrite(int value, BinNode* current);
+  void flrWrite(int value, BinNode* current);
+  void rWrite(int value, BinNode* current);
+  void rlWrite(int value, BinNode* current);
+  void frlWrite(int value, BinNode* current);
+           
 
 };

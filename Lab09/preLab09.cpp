@@ -4,6 +4,7 @@
 #include <fstream>
 #include <string>
 #include "preLab09.h"
+#include <sstream>
 using namespace std;
 
 BinNode::BinNode(){
@@ -100,7 +101,7 @@ bool BST::search(int aData){
 }
 BinNode* BST::find(int data){
 	BinNode* tReturn;
-  iFind(root, data);
+  tReturn=iFind(root, data);
   return tReturn;
 }
 BinNode* BST::iFind(BinNode* tree, int aData){
@@ -138,6 +139,10 @@ bool BST::isBalanced(){
     if(abs(lh-rh)>1){
       cout<<"tree is balanced"<<endl;
       return true;
+    }  
+  else{
+      cout<<"tree is unbalanced"<<endl;
+      return false;
     }
   }}
 bool BST::is_BST(){
@@ -284,15 +289,38 @@ void BST::remove(int dData){
   else{
 
     cout<<dData<<endl;
-    BinNode* storage=new BinNode();
-    storage=item->right;
-    BinNode* storage2=new BinNode();
-    storage2=rFind(item->left, -1);
-    item=item->left;
-    storage2->left=storage;
+    BinNode* litem=find(dData);
+    cout<<litem->data<<endl;
+    reInsert(item);
   }}
   else{
     cout<<"no such data"<<endl;
+  }
+}
+void BST::reInsert(BinNode* tree){
+  if(tree->left->data==-1 && tree->right->data==-1){
+    tree->data=-1;
+  }
+  else if(tree->left->data==-1 && tree->right->data!=-1){
+    tree=tree->right;
+    tree->left->data=-1;
+  }
+  else if(tree->left->data!=-1 && tree->right->data==-1){
+      tree=tree->left;
+      tree=tree->right;
+  }
+  else if(tree->left->data!=-1 && tree->right->data!=-1){
+    BinNode* iFound=rFind(tree->left, -1);
+    if(iFound->left->data==-1){
+    iFound->left=tree->right;
+    tree=tree->left;
+    tree->right->data=-1;
+    } 
+    else if(iFound->right->data==-1){
+    iFound->right=tree->right;
+    tree=tree->left;
+    tree->right->data=-1;
+    }
   }
 }
 void BST::pre_order(){
@@ -422,4 +450,222 @@ void BST::rpost_order(BinNode* thyNode){
     rpost_order(thyNode->right);
     cout<<thyNode->data<<" ";
 }}
+void BST::write(string file_name){
+  ifstream iFile;
+  iFile.open(file_name.data());
+  if(!iFile.is_open()){
+    std::cerr<<"error in opening files";
+  }
+  string line;
+  while(getline(iFile,line)){
+    std::stringstream lineStream(line);
+    std::deque<int> values;
+    int n;
+    while(lineStream>>n){
+      values.push_back(n);
+    }
+  vWrite(values); 
+  }
+}
+void BST::vWrite(std::deque<int> values){
+  
+  for(unsigned int i=0; i<values.size(); i++){
+    if(root==NULL){
+      BinNode* item=new BinNode();
+      root=item;
+      BinNode* item2=new BinNode();
+      root->left=item2;
+      BinNode* item3=new BinNode();
+      root->right=item3;
+      root->data=values.front();
+      values.pop_front(); 
+    } 
+    else if(iFind(root->left, NULL)!=NULL){
+      lWrite(values.front(), root);
+      values.pop_front();
+    }
+    else if(iFind(root->right, NULL)!=NULL){
+      rWrite(values.front(), root);
+      values.pop_front();
+    }
+    else{
+     cout<<"invalid data insertions cannot be performed"<<endl;
+    }}
+}
 
+  void BST::lWrite(int value, BinNode* current){
+   // if(current->left->left->data!=-1 && current->left->right->data!=-1){
+    if(current->left->data==NULL){
+      current->left->data=value;
+      BinNode* item1=new BinNode();
+      BinNode* item2=new BinNode();
+      if(value!=-1){
+      current->left->right=item1;
+      current->left->left=item2;  
+      }
+    }
+    else if(current->left->data!=-1 && current->left->data!=NULL){
+      lWrite(value, current->left);
+    }
+    else if(current->left->data==-1){
+      lrWrite(value, current);
+    }
+  }
+    /*if(iFind(current->right, NULL)==NULL){
+      flrWrite(value, root);
+      
+    }
+    else{
+      lrWrite(value, current);
+    }*/
+
+  void BST::lrWrite(int value, BinNode* current){
+    if(current->right->data==NULL){
+      current->right->data=value;
+      if(value!=-1){
+        BinNode* item1=new BinNode();
+        BinNode* item2=new BinNode();
+        current->right->right=item1;
+        current->right->left=item2;
+      }
+    }
+    else if(current->right->data!=-1 && current->right->data!=NULL){
+      current=current->right;
+      lWrite(value, current);
+    }
+    else if(current->right->data==-1){
+      flrWrite(value, root->left);
+    }
+}
+  void BST::flrWrite(int value, BinNode* current){
+       BinNode* preCurrent=new BinNode(); 
+       if(current->data==NULL){
+          current->data=value;
+          if(value!=-1){
+            BinNode* item1=new BinNode();
+            BinNode* item2=new BinNode();
+            current->left=item1;
+            current->right=item2;
+          }  
+        } 
+       else if(iFind(current->left,NULL)!=NULL){
+          current=current->left;
+          preCurrent=current;  
+          }  
+        else if(iFind(current->left,NULL)==NULL){
+           flrWrite(value, preCurrent->right);
+        }
+  }
+  void BST::rWrite(int value, BinNode* current){
+    if(current->right->data==NULL){
+        current->right->data=value;
+        BinNode* item1=new BinNode();
+        BinNode* item2=new BinNode();
+        if(value!=-1){
+          current->right->right=item1;
+          current->right->left=item2;
+        }
+    }
+    else if(current->right->data!=-1 && current->right->data!=NULL && (iFind(current->left,NULL)!=NULL)){
+      //current=current->left;
+      rlWrite(value, current);
+    }
+    //current->right->data==-1
+}
+  void BST::rlWrite(int value, BinNode* current){
+      if(current->left->data==NULL){
+        current->left->data=value;
+        if(value!=-1){
+          BinNode* item1=new BinNode();
+          BinNode* item2=new BinNode();
+          current->right=item1;
+          current->left=item2; 
+        }
+      }
+      else if(current->left->data!=-1 && current->left->data!=NULL){
+        current=current->left;
+        rlWrite(value, current);
+      } 
+      else if(current->left->data==-1 && current->right->data==NULL){
+         current->right->data=value;
+         if(value!=-1){
+          BinNode* item2=new BinNode();
+          BinNode* item1=new BinNode();
+          current->right->right=item2;
+          current->right->left=item1;
+         }
+      }
+      else if(current->left->data==-1 && current->right->data!=NULL && current->right->data!=-1){
+      current=current->right;
+      rlWrite(value, current);  
+    }
+      else if(current->left->data==-1 && current->right->data==-1){
+        frlWrite(value, root->right);
+      }
+  }
+
+  void BST::frlWrite(int value, BinNode* current){
+       BinNode* preCurrent=new BinNode(); 
+       if(current->data==NULL){
+          current->data=value;
+          if(value!=-1){
+            BinNode* item1=new BinNode();
+            BinNode* item2=new BinNode();
+            current->left=item1;
+            current->right=item2;
+          }  
+        } 
+       else if(iFind(current->left, NULL)==NULL){
+          current=current->right;
+          }  
+        else if(iFind(current->left, NULL)!=NULL){
+           flrWrite(value, current->left);
+        }
+}
+ /*   else if(current->right->data==-1 && current->right->data==NULL){
+      current->right->data=value;
+    }
+    else if(current->left->right->data!=-1 && current->left->right->data!=NULL){
+      current=current->left->right;
+      lWrite(value, current);
+    }*/
+    
+    
+
+/*    int vWrite=lWrite(values[i], current);
+    if(vWrite==-1){
+      rWrite(values[i], current);
+    } 
+  }
+}
+int BST::lWrite(int value, BinNode* current){
+    if(current->left->left->data!=-1 && current->left->right->data!=-1){
+    if(current->left->data==NULL){
+      current->left->data=value;
+    }
+    else if(current->left->left->data==-1){
+        int rData=lrWrite(value, current);
+        if(rData==-1){
+          return -1;
+        }
+    } 
+    else if(current->left->data!=-1 && current->left->data!=NULL){
+      current=current->left;
+      lWrite(value, current);
+    
+  }
+  else{
+    lWrite(value, current->right);
+  }
+    
+}
+int BST::lrWrite(int value, BinNode* current){
+    if(current->right==NULL){
+      curret->right->data=value;
+    }
+    else if(current->left->data==-1 && current->left->right==-1){
+        current->right->data=data;
+        lWrite(value, current->right);
+    }
+    else if(
+}*/
