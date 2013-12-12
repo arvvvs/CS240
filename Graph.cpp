@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <queue>
+#include <sstream>
 #include <algorithm>
 #include "Graph.h"
 
@@ -28,12 +29,12 @@ void Graph::readFromFile(string file) {
 		
 		//reading the first line and placing it in 'vCount'
 		getline(inFile, line);
-		istringstream ( line ) >> vCount;
+		stringstream ( line ) >> vCount;
 	
 		vector<string> input;
 
 		while(getline(inFile, line)) 
-			input.insert(line);		
+			input.push_back(line);		
 		inFile.close();
 
 		for(int i = 0; i < vCount; ++i) {
@@ -58,8 +59,8 @@ void Graph::readFromFile(string file) {
 
 }
 
-void Grpah::writeToFile(string file) {
-
+void Graph::writeToFile(string file) {
+	string house = file;
 }
 
 bool Graph::empty() {
@@ -75,15 +76,15 @@ void Graph::addEdge(string v1, string v2, int weight) {
 //Pretty straight forward, just make the object and adjust the matrix accordingly.
 void Graph::addVertex(string name, float val) {
 	Vertex* v = new Vertex({val, name, false});
-	vertices.insert(v);
+	vertices.push_back(v);
 	matrix.push_back(vector<int>());
-	for(int i = 0; i < matrix.size(); ++i) {
+	for(int i = 0; i < (vCount + 1); ++i) {
 		matrix[matrix.size() - 1].push_back(0);
-		if(i < matrix.size() - 1)
+		if(i < vCount - 1)
 			matrix[i].push_back(0);
 	}
 	vMap[name] = (vertices.size() - 1);
-	setCount++;
+	vCount++;
 }
 
 
@@ -92,44 +93,43 @@ int Graph::numConnectedComponents() {
 	for(Vertex* v : vertices)
 		v->latch = false;
 
-	vector<set<int>>* sets = new vector<set<int>>();
+	vector<set<int>> sets;
 	int k;
 
 	//Looping through all the vertices.
-	for(int i = 0; i < vertices.size(); ++i) {
+	for(int i = 0; i < vCount; ++i) {
 
 		//If the vertice hasn't been seen, will do a BFS from it and add all nodes to a set.
 		//The code is very similar to BFS.
-		if(!vertices[i]->latch) {
-			queue<int>* q = new queue<int>;
-			sets.push_back(set<int>);
+		if(!(vertices[i])->latch) {
+			queue<int> q;
+			sets.push_back(set<int>());
 			sets[sets.size() - 1].insert(i);
 			q.push(i);
 			while(!q.empty()) {
 				k = q.front();
 				q.pop();
-				for(int j = 0; j < vertices.size(); ++j) {
+				vertices[k]->latch = true;
+				for(int j = 0; j < vCount; ++j) {
 					if(matrix[k][j] != 0 && !vertices[j]->latch)
 						q.push(j);
 				}
 			}
 		}
 	}
-
 	return sets.size();
-
 }
 
 //if graph is not disjoint and number of edges = #vertices - 1
 bool Graph::tree() {
-	if(numConnectedComponents() == 1 && edgeCount = (setCount - 1))
+	if(numConnectedComponents() == 1 && edgeCount == (vCount - 1))
 		return true;
 	else
 		return false;
 }
 
 void Graph::minWeightComponent(string src) {
-
+	string bogus = src;
 }
 
 //Just uses recursion
@@ -147,7 +147,7 @@ void Graph::recurDFS(int indice, string val, bool& found) {
 	if(vertices[indice]->name.compare(val) != 0)
 		found = true;
 	if(!found) {
-		for(int i = 0; i < vertices.size(); ++i) {
+		for(int i = 0; i < vCount; ++i) {
 			if(matrix[indice][i] != 0 && !vertices[i]->latch)
 				recurDFS(i, val, found);
 		}
@@ -155,38 +155,58 @@ void Graph::recurDFS(int indice, string val, bool& found) {
 }
 
 bool Graph::BFS(string source, float val) {
-	queue<int>* q = new q<int>();
+	queue<int> q;
 	for(Vertex* s : vertices)
 		s->latch = false;
 	int v = vMap[source];
-	vertices[v]->latch = true;
 	q.push(v);
 	while(!q.empty()) {
 		v = q.front();
 		q.pop();
+		vertices[v]->latch = true;
 		if(vertices[v]->value == val)
 			return true;
-		for(int i = 0; i < vertices.size(); ++i) {
+		for(int i = 0; i < vCount; ++i) {
 			if(matrix[v][i] != 0 && !vertices[i]->latch)
 				q.push(i);
 		}
 	}
-	delete [] q;
 	return false;
 }
 
+//Uses BFS
 int Graph::closeness(string v1, string v2) {
+	int one = vMap[v1], two = vMap[v2], count = 1;
+	queue<int> q;
+	bool found = false;
+	q.push(one);
+	while(!q.empty()) {
+		one = q.front();
+		q.pop();
+		vertices[one]->latch = true;
 
+		for(int i = 0; i < vCount; ++i) {
+			if(matrix[one][i] != 0 && !vertices[i]->latch) {
+				q.push(i);
+				if(i == two)
+					found == true;
+			}
+		}
+		if(!found)
+			count++;
+		else
+			break;
+	}
+	return count;
 }
 
 bool Graph::partitionable() {
-
 }
 
-bool Graph::isSubGraph(const Graph& g) {
-
+bool Graph::isSubGraph(const Graph& g) {	
+	return false;
 }
 
 void printPathCloseVal(float value) {
-
+	float cow = value;
 }

@@ -12,10 +12,10 @@ struct Vertex {
 
 class Graph{
 	private:
-		std::vector<vector<int>> matrix;
-		std::set<Vertex*> vertices;
-		std::unordered_map<string, int> vMap;
-		int setCount;
+		std::vector<std::vector<int>> matrix;
+		std::vector<Vertex*> vertices;
+		std::unordered_map<std::string, int> vMap;
+		int vCount;
 		int edgeCount;
 		
 	public:
@@ -41,11 +41,11 @@ class Graph{
 		void minWeightComponent(std::string src);
 		//Depth First Search
 		bool DFS(std::string source, std::string val);
-		bool recurDFS(int indice, std::string val);
+		void recurDFS(int indice, std::string val, bool& found);
 		//Breadth First Search
 		bool BFS(std::string source, float val);
 		//Closeness
-		int closeness(std::string v1, std::stringv2);
+		int closeness(std::string v1, std::string v2);
 		//Partition
 		bool partitionable();
 		//* Subgraph Test
