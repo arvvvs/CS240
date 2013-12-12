@@ -12,8 +12,8 @@ Graph::Graph() {
 }
 
 Graph::~Graph() {
-	for(Vertex* v : vertices)
-		delete v;
+	for(int i = 0; i < vertices.size(); i++)
+		delete vertices[i];
 }
 
 void Graph::readFromFile(string file) {
@@ -75,7 +75,7 @@ void Graph::addEdge(string v1, string v2, int weight) {
 
 //Pretty straight forward, just make the object and adjust the matrix accordingly.
 void Graph::addVertex(string name, float val) {
-	Vertex* v = new Vertex({val, name, false});
+	Vertex* v = new Vertex({val, name, false, '\0'});
 	vertices.push_back(v);
 	matrix.push_back(vector<int>());
 	for(int i = 0; i < (vCount + 1); ++i) {
@@ -90,8 +90,8 @@ void Graph::addVertex(string name, float val) {
 
 int Graph::numConnectedComponents() {
 	//Setting the dummy boolean in the structs to false.
-	for(Vertex* v : vertices)
-		v->latch = false;
+	for(int i = 0; i < vertices.size(); i++)
+		vertices[i]->latch = false;
 
 	vector<set<int>> sets;
 	int k;
@@ -134,8 +134,8 @@ void Graph::minWeightComponent(string src) {
 
 //Just uses recursion
 bool Graph::DFS(string source, string val) {
-	for(Vertex* v : vertices)
-		v->latch = false;
+	for(int i = 0; i < vertices.size(); i++)
+		vertices[i]->latch = false;
 	int i = vMap[source];
 	bool found = false;
 	recurDFS(i, val, found);
@@ -156,8 +156,8 @@ void Graph::recurDFS(int indice, string val, bool& found) {
 
 bool Graph::BFS(string source, float val) {
 	queue<int> q;
-	for(Vertex* s : vertices)
-		s->latch = false;
+	for(int i = 0; i < vertices.size(); i++)
+		vertices[i]->latch = false;
 	int v = vMap[source];
 	q.push(v);
 	while(!q.empty()) {
@@ -189,7 +189,7 @@ int Graph::closeness(string v1, string v2) {
 			if(matrix[one][i] != 0 && !vertices[i]->latch) {
 				q.push(i);
 				if(i == two)
-					found == true;
+					found = true;
 			}
 		}
 		if(!found)
@@ -200,7 +200,93 @@ int Graph::closeness(string v1, string v2) {
 	return count;
 }
 
+// Here be dragons
 bool Graph::partitionable() {
+    // If we have three or less vertexes,
+    // the graph is automatically partitionable
+    // (Check this? Maybe I'm thinking of it wrong...)
+    if (vertices.size() <= 3)
+        return true;
+    
+    // Assign a blank color to all vertexes.
+    for(int i = 0; i < vertices.size(); i++)
+		vertices[i]->color = '\0';
+	// Mark the current vertex. We don't need to worry about names, all we care about is adjacency.
+	int currIndex;
+	
+	// Assign the first node a color..
+    vertices[0]->color = 'b';
+	bool zeros = false;
+	
+	// Starting from the first node and iterating the the last node in increments of 1...
+	for (currIndex = 0; currIndex < vertices.size(); currIndex++)
+	{
+	    // If this node doesn't already have a color, skip it. We'll process it the second time around
+	    if (vertices[currIndex]->color == '\0')
+	        zeros = true;
+	    else // if it does have one, we've already processed it's path
+	        continue;
+	        
+        // If this node is not partitionable, neither is the graph.
+	    if (!recurPartitionable(currIndex, 'b'))
+	        return false;
+	}
+
+    // Until we have no uncolored nodes.
+    while (zeros)
+    {
+        bool set = false;
+    	// Nth iteration, we need to process all previously unprocessed nodes!
+    	for (currIndex = 0; currIndex < vertices.size(); currIndex++)
+    	{
+    	    // If uncolored...
+    	    if (vertices[currIndex]->color == '\0')
+    	    {
+    	        // ...and it's the first, set color and mark first
+    	        if (zeros && !set)
+    	        {
+    	            vertices[currIndex]->color = 'b';
+                    zeros = false;
+                    set = true;
+    	        }
+    	        else // if it's not the first, let us know that there are more uncolored roots.
+    	            zeros = true;
+    	    }
+    	    else // if it does have a color already, we've already processed its path
+    	        continue;
+    	        
+            // If this node is not partitionable, neither is the graph.
+    	    if (!recurPartitionable(currIndex, 'b'))
+    	        return false;
+    	}
+    }
+	
+	// If we never return false, the answer by default is true.
+	return true;
+}
+
+// And more dragons...
+bool Graph::recurPartitionable(int currIndex, char currColor)
+{
+    char nextColor = (currColor == 'r') ? 'b' : 'r';
+    
+    // The interior index (to check path from node )
+    int inIndex;
+    for (inIndex = 0; inIndex <= vertices.size(); inIndex++)
+    {
+        // We don't want to check itself! We also only want to check for edges that exist!
+        if (inIndex != currIndex && matrix[currIndex][inIndex] > 0)
+        {
+            if (vertices[inIndex]->color == '\0') // If we have not assigned a color, assign the next color.
+                vertices[inIndex]->color = nextColor;
+            else if (vertices[inIndex]->color == currColor) // If we have assigned a color, and it is the same as the current color, we cannot partition
+                return false;
+            
+            // If this node is not partitionable, neither is the graph.
+            if (!recurPartitionable(inIndex, nextColor))
+                return false;
+        }
+    }
 }
 
 bool Graph::isSubGraph(const Graph& g) {	

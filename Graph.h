@@ -8,6 +8,7 @@ struct Vertex {
 	float value;
 	std::string name;
 	bool latch;
+	char color;
 };
 
 class Graph{
@@ -48,6 +49,7 @@ class Graph{
 		int closeness(std::string v1, std::string v2);
 		//Partition
 		bool partitionable();
+		bool recurPartitionable(int index, char currColor);
 		//* Subgraph Test
 		bool isSubGraph(const Graph& g);
 		//Print Valued Path
