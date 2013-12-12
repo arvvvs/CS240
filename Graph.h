@@ -1,38 +1,22 @@
 #include <string>
-#include <iostream>
 #include <vector>
 #include <set>
-#include <map>
+#include <stack>
+#include <unordered_map>
 
-//This class will be used to create a graph library.
-
-/**Whenever paths are to be printed, they should be printed with 
-	v1 -> v2 -> v3 -> ...
-where v1, v2, and v3 are replaced with the names of the vertex **/
-
-/**Whenever trees are to be printed, they should be printed with
-	{V, E} 
-where V is the set of vertices, and E is the set of edges 
-(note: V and E are sets and should be enclosed in brackets)**/
+struct Vertex {
+	float value;
+	std::string name;
+	bool latch;
+};
 
 class Graph{
 	private:
 		std::vector<vector<int>> matrix;
-		std::set<Vertex> vertices;
-		std::set<Edge> edges;
-		std::map<int, Vertex> vMap;
-		std::map<string, int> nMap;
-		
-		class Vertex {
-			float value;
-			std::string name;
-		};
-		
-		class Edge {
-			Vertex one;
-			Vertex two;
-			int weight;
-		};
+		std::set<Vertex*> vertices;
+		std::unordered_map<string, int> vMap;
+		int setCount;
+		int edgeCount;
 		
 	public:
 		//Construct
@@ -57,8 +41,9 @@ class Graph{
 		void minWeightComponent(std::string src);
 		//Depth First Search
 		bool DFS(std::string source, std::string val);
+		bool recurDFS(int indice, std::string val);
 		//Breadth First Search
-		bool BFS(std::string source, std::string val);
+		bool BFS(std::string source, float val);
 		//Closeness
 		int closeness(std::string v1, std::stringv2);
 		//Partition
