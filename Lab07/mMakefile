@@ -1,0 +1,8 @@
+all: tester
+tester: Tester.o Driver.o
+  g++ -g -W -Wall -Wextra -std=c++0x Tester.o -o tester
+  g++ -g -W -Wall -Wextra -std=c++0x Driver.o -o driver
+Tester.o: LinkedList.cc LinkedList.h Tester.cpp
+  g++ -g -W -Wall -Wextra -std=c++0x -c Tester.cpp 
+Driver.o: LinkedList.cc LinkedList.h Driver.cpp
+  g++ -g -W -Wall -Wextra -std=c++0x -c Driver.cpp

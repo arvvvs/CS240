@@ -1,0 +1,10 @@
+all: DynamicArray
+DynamicArray: Driver.o DynamicArray.o
+	g++ -Wall -g -std=c++0x DynamicArray.o Driver.o -o DynamicArray
+Driver.o: Driver.cpp
+	g++ -g -c -W -Wall -std=c++0x Driver.cpp -o Driver.o
+DynamicArray.o: DynamicArray.cpp DynamicArray.h
+	g++ -g -c -W -Wall -std=c++0x DynamicArray.cpp -o DynamicArray.o
+clean:
+	rm *.o dynamicArray
+

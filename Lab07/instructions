@@ -1,0 +1,94 @@
+CS 240 -- Lab 06
+
+IMPORTANT NOTE:
+	YOU ARE REQUIRED TO SUBMIT SOMETHING BEFORE THE END OF LAB TODAY.
+	DO NOT PUT THIS OFF UNTIL THE LAST MINUTE AS IT WILL WASTE BOTH
+	YOUR TIME AND THE TIME OF THE TA/CA. 
+
+
+
+
+In order to get the code you will be using to test your LinkedList class,
+you will have to use wget to get the following three files.
+
+bingweb.binghamton.edu/~jhartog/6/Driver.cpp
+bingweb.binghamton.edu/~jhartog/6/Random.h
+bingweb.binghamton.edu/~jhartog/6/Random.cpp
+
+
+To complete the lab, perform each of the following tasks:
+
+1) In your code for LinkedList, you will replace your primitive data 
+type (in the Item typedef) with the Random class provided. The Random
+class has an overloaded <<, copy constructor, destructor, and 
+assignment operator -- which should be enough when interacting with
+your LinkedList code as well as the Driver code provided. (This code 
+has been tested and does not contain memory leaks. It should not 
+produce errors with your code for LinkedList, which should strive for
+simplicity.)
+
+2) Read through and understand what is to be expected as output
+from the Driver.cpp file. Ask yourself what would happen if this
+was working with floats as was done in the pre-lab.
+
+3) Modify your Makefile to produce an executable named "lab06rand".
+This file should use the Driver.cpp, Random.h, and Random.cpp files
+referenced above in order to produce the executable program. Your
+code for the pre-lab should already be implemented in files with
+the names LinkedList.h and LinkedList.cpp.
+
+3) Run the executable and verify the results through inspection. Make
+sure data is the same when it should be the same, and that nodes are 
+inserted on the proper end of the list. Also make sure that you can 
+pass the stress tests. Since this code relies on random numbers, the
+output will be different every time -- you should run your program 
+several times.
+
+4) Verify you have no leaks when you run your program through valgrind
+(see bottom of this file for reference to the command). Run your
+program multiple times through valgrind to increase probability that
+the stress test may find something wrong.
+
+5) Once you are satisfied that your code passes the provided tests, 
+create a directory that bears your username. For instance if my
+login to these machines was jode6, then my folder should be named
+jdoe6
+
+6) Copy all relevant files into this directory (Random.cpp, Random.h,
+Driver.cpp, LinkedList.cpp, LinkedList.h, Makefile, etc.)
+
+7) Verify that everything in your new directory is what (and only what)
+is needed for the TA to compile and test your program.
+
+8) Verify that your new directory is free of object files, executables
+and temporary files (like those ending in ~ or starting in .swp)
+
+9) Create a tar.gz archive (in gzip format) of the directory from the
+previous steps. This archive should be named username_lab06.tar.gz where
+username is replaced as in the previous steps. For example:
+jdoe6_lab06.tar.gz
+
+10) Compute the md5 checksum of this tar.gz file. We will do this 
+using the md5sum command. Re-direct the output to a file named CHKSUM.
+Using our running example, the command to do this is:
+md5sum jdoe6_lab06.tar.gz > CHKSUM
+
+11) Create a directory named lab06. Move your .tar.gz file (whose
+checksum you just created) into this directory. Move the
+CHKSUM file into this directory as well.
+
+12) Create a tar file of this lab06 directory. Name this directory
+lab06_username.tar (note there is no .gz at the end) with username
+replaced by your username. For example lab06_jdoe6.tar
+
+13) Once you have done these things, call the TA/CA over to you, and 
+using the GUI upload your submission using the link on Blackboard.
+
+
+
+
+
+
+
+valgrind --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes ./lab06rand
+

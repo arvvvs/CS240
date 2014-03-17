@@ -1,0 +1,24 @@
+#include<iostream>
+#include<cstdlib>
+#include "DynamicArray.h"
+int main(int argc, char** argv)
+{
+	//size element e
+	DynamicArray dynamicArray(12,34);
+	
+
+	dynamicArray.push_back(21);
+	dynamicArray.push_back(32);
+	dynamicArray.push_back(37);
+	
+	
+	std::cout<<"pop back is  "<<dynamicArray.pop_back()<<std::endl;
+	std::cout<<"pop back is  "<<dynamicArray.pop_back()<<std::endl;
+	std::cout<<"pop back is  "<<dynamicArray.pop_back()<<std::endl;
+	std::cout<<"pop back is  "<<dynamicArray.pop_back()<<std::endl;
+	std::cout<<"capacity is "<<dynamicArray.capacity()<<std::endl;
+	std::cout<<"size is "<<dynamicArray.size()<<std::endl;
+	
+}
+	
+
